@@ -1,5 +1,4 @@
 #include "../../../backend.hpp"
-#include "../../../console/console.hpp"
 
 #ifdef ENABLE_BACKEND_VULKAN
 #include <Windows.h>
@@ -56,7 +55,6 @@ static bool CreateDeviceVK( ) {
 
         // Create Vulkan Instance without any debug feature
         vkCreateInstance(&create_info, g_Allocator, &g_Instance);
-        LOG("[+] Vulkan: g_Instance: 0x%p\n", g_Instance);
     }
 
     // Select GPU
@@ -82,7 +80,6 @@ static bool CreateDeviceVK( ) {
         }
 
         g_PhysicalDevice = gpus[use_gpu];
-        LOG("[+] Vulkan: g_PhysicalDevice: 0x%p\n", g_PhysicalDevice);
 
         delete[] gpus;
     }
@@ -100,8 +97,6 @@ static bool CreateDeviceVK( ) {
             }
         }
         IM_ASSERT(g_QueueFamily != (uint32_t)-1);
-
-        LOG("[+] Vulkan: g_QueueFamily: %u\n", g_QueueFamily);
     }
 
     // Create Logical Device (with 1 queue)
@@ -124,7 +119,6 @@ static bool CreateDeviceVK( ) {
 
         vkCreateDevice(g_PhysicalDevice, &create_info, g_Allocator, &g_FakeDevice);
 
-        LOG("[+] Vulkan: g_FakeDevice: 0x%p\n", g_FakeDevice);
     }
 
     return true;
@@ -313,7 +307,6 @@ static VkResult VKAPI_CALL hkCreateSwapchainKHR(VkDevice device,
 namespace VK {
     void Hook(HWND hwnd) {
         if (!CreateDeviceVK( )) {
-            LOG("[!] CreateDeviceVK() failed.\n");
             return;
         }
 
@@ -329,12 +322,6 @@ namespace VK {
 
         if (fnAcquireNextImageKHR) {
             g_Hwnd = hwnd;
-
-            // Hook
-            LOG("[+] Vulkan: fnAcquireNextImageKHR: 0x%p\n", fnAcquireNextImageKHR);
-            LOG("[+] Vulkan: fnAcquireNextImage2KHR: 0x%p\n", fnAcquireNextImage2KHR);
-            LOG("[+] Vulkan: fnQueuePresentKHR: 0x%p\n", fnQueuePresentKHR);
-            LOG("[+] Vulkan: fnCreateSwapchainKHR: 0x%p\n", fnCreateSwapchainKHR);
 
             static MH_STATUS aniStatus = MH_CreateHook(reinterpret_cast<void**>(fnAcquireNextImageKHR), &hkAcquireNextImageKHR, reinterpret_cast<void**>(&oAcquireNextImageKHR));
             static MH_STATUS ani2Status = MH_CreateHook(reinterpret_cast<void**>(fnAcquireNextImage2KHR), &hkAcquireNextImage2KHR, reinterpret_cast<void**>(&oAcquireNextImage2KHR));
@@ -569,7 +556,6 @@ static bool DoesQueueSupportGraphic(VkQueue queue, VkQueue* pGraphicQueue) {
 #else
 #include <Windows.h>
 namespace VK {
-    void Hook(HWND hwnd) { LOG("[!] Vulkan backend is not enabled!\n"); }
     void Unhook( ) { }
 } // namespace VK
 #endif

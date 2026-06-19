@@ -1,5 +1,4 @@
 #include "../../../backend.hpp"
-#include "../../../console/console.hpp"
 
 #ifdef ENABLE_BACKEND_DX9
 #include <Windows.h>
@@ -28,7 +27,6 @@ static void RenderImGui_DX9(IDirect3DDevice9* pDevice);
 static bool CreateDeviceD3D9(HWND hWnd) {
     g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
     if (g_pD3D == NULL) {
-        LOG("[!] Direct3DCreate9() is failed.\n");
         return false;
     }
 
@@ -38,7 +36,6 @@ static bool CreateDeviceD3D9(HWND hWnd) {
 
     HRESULT hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_NULLREF, hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &g_pd3dDevice);
     if (hr != D3D_OK) {
-        LOG("[!] CreateDevice() failed. [rv: %lu]\n", hr);
         return false;
     }
 
@@ -88,12 +85,8 @@ static HRESULT WINAPI hkPresentEx(IDirect3DDevice9* pDevice,
 namespace DX9 {
     void Hook(HWND hwnd) {
         if (!CreateDeviceD3D9(GetConsoleWindow( ))) {
-            LOG("[!] CreateDeviceD3D9() failed.\n");
             return;
         }
-
-        LOG("[+] DirectX9: g_pD3D: 0x%p\n", g_pD3D);
-        LOG("[+] DirectX9: g_pd3dDevice: 0x%p\n", g_pd3dDevice);
 
         if (g_pd3dDevice) {
             Menu::InitializeContext(hwnd);
@@ -177,7 +170,7 @@ static void RenderImGui_DX9(IDirect3DDevice9* pDevice) {
 #else
 #include <Windows.h>
 namespace DX9 {
-    void Hook(HWND hwnd) { LOG("[!] DirectX9 backend is not enabled!\n"); }
+    void Hook(HWND hwnd) {  }
     void Unhook( ) { }
 } // namespace DX9
 #endif
