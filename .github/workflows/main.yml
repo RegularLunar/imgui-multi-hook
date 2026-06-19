@@ -21,7 +21,10 @@ jobs:
         uses: microsoft/setup-msbuild@v2
         
       - name: Install Vulkan SDK
-        uses: humbletim/install-vulkan-sdk@v1.1.1
+        run: |
+          curl -L https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe -o vulkan-sdk.exe
+          ./vulkan-sdk.exe --accept-licenses --default-answer --confirm-command install
+          echo "VULKAN_SDK=C:/VulkanSDK/$(ls C:/VulkanSDK)" | Out-File -Append -FilePath $env:GITHUB_ENV
         
       - name: Build
         run: msbuild MultiHook.sln /p:Configuration=Release /p:Platform=x64
