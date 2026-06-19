@@ -1,0 +1,19 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install premake5
+        run: choco install premake --version=5.0.0-beta2 -y
+
+      - name: Generate project files
+        run: premake5 vs2022
+
+      - name: Build
+        run: |
+          & "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe" MultiHook.sln /p:Configuration=Release /p:Platform=x64
