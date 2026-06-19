@@ -556,6 +556,7 @@ static bool DoesQueueSupportGraphic(VkQueue queue, VkQueue* pGraphicQueue) {
 #else
 #include <Windows.h>
 namespace VK {
+    void Hook(HWND hwnd) { }
     void Unhook( ) { }
-} // namespace VK
+}
 #endif
