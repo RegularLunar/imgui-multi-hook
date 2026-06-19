@@ -15,7 +15,7 @@ project "MultiHook"
 
     includedirs { "$(VULKAN_SDK)/Include" }
     libdirs     { "$(VULKAN_SDK)/Lib" }
-
+    links { "vulkan-1" }
     defines {
         "ImTextureID=ImU64",
         "NDEBUG",
