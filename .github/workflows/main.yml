@@ -19,6 +19,9 @@ jobs:
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
-
+        
+      - name: Install Vulkan SDK
+        uses: humbletim/install-vulkan-sdk@v1.1.1
+        
       - name: Build
         run: msbuild MultiHook.sln /p:Configuration=Release /p:Platform=x64
