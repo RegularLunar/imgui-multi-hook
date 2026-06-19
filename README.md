@@ -14,22 +14,28 @@
 - DX10
 - DX11
 - DX12
-- OGL
-- VLK
+- OpenGL
+- Vulkan
 
 ---
 
 ### Building From Source
 
-- **Visual Studio 2022**,- **CMake 3.16** or higher
+Prerequisite:
+- **Visual Studio 2022**
+- **premake5** (premake5 must be in your PATH)
 - **Windows SDK**
+- **Vulkan SDK**
+
+Building:
 
 ```bash
 git clone https://github.com/RegularLunar/imgui-multi-hook.git
 cd imgui-multi-hook
-cmake -B build -S . -A x64
-cmake --build build --config Release
+premake5 vs2022
 ```
+
+Then open `MultiHook.sln` in Visual Studio, Go to [SetRenderingBackend](https://github.com/RegularLunar/imgui-multi-hook/blob/e87bdb306f78b9fe425e03ef360d671d70c2d3d3/MultiHook/src/dllmain.cpp#L17) and choose your backend. Then build!
 
 ---
 
